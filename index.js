@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import morgan from 'morgan'
 import cookieParser from "cookie-parser"
+// import webPush from "web-push"//Пуш уведомления
 // import dotenv from 'dotenv'
 // import GenerateSchema from "generate-schema";
 import Mongoose from "mongoose"; //Подключение к mongoDB
@@ -14,7 +15,7 @@ import fileUpload from "express-fileupload"; //Работа с файлами
 // import methodOverride from 'method-override'
 // import fs from 'fs'
 // import crypto from 'crypto'
-import dotenv from 'dotenv'
+import dotenv from 'dotenv' 
 dotenv.config()
 import router from "./router.js"; //маршруты
 const PORT = process.env.PORT 
@@ -49,6 +50,7 @@ async function startApp() {
       useUnifiedTopology: true,
       useNewUrlParser: true,
     }); //Подключаемся к MongoDB
+    
     app.listen(PORT, () => {
       console.log("SERVER START AT PORT:", PORT);
     });

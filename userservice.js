@@ -132,7 +132,10 @@ class UserService {
             $lt: beforeDate.join("-"),
           };
           
-        } else {
+        } else if(key=='id') {
+          user[String(`profile.${key}`)]={$ne:animal[key]}
+
+        }else {
           user[String(`animal.${key}`)] = animal[key];
         }
       }

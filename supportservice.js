@@ -1,5 +1,6 @@
 import axios from "axios";
 import translate from "translate";
+import webPush from "web-push"
 class SupportService {
   async getCity(long, lat) {
     //Получаем город из геопозиции
@@ -26,6 +27,21 @@ class SupportService {
     } catch (e) {
       throw new Error(e);
     }
+  }
+  async subscribePush(subscription){
+    webPush.setVapidDetails(
+      "mailto:test@test.com",
+  process.env.publicVapidKey,
+  process.env.privateVapidKey
+    )
+    console.log('subs',subscription)
+    const payload = JSON.stringify({ title: "Zavodchick notification" });
+
+  // Pass object into sendNotification
+  webPush
+    .sendNotification(subscription, payload)
+    .catch(err => console.error(err));
+
   }
 }
 export default new SupportService();

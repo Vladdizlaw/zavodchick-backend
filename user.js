@@ -43,6 +43,8 @@ const User = new mongoose.Schema({
   photoAnimal: { type: "array", items: [Object] },
   photoUrl: { type: "array", items: [String] },
   profile: { type: "object", ref: "profile" },
+  noticeBreed: {type :"object",properties:[Object]},
+  noticeMatingDate: {type: "object",properties:[Object]},
   token: { type: "string" },
 });
 export default mongoose.model("User", User);
