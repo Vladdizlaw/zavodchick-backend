@@ -1,6 +1,7 @@
 import Router  from "express";
 import verifyToken from './middleware.js'
 import SupportController from './supportcontroller.js'
+import MessageController from './messages.js'
 const router= new Router()
 import UserController from "./usercontroller.js"
 router.post("/create_user", UserController.createUser)
@@ -15,5 +16,5 @@ router.post("/login",UserController.login)
 router.post("/subscribe",SupportController.subscribePush)
 router.get("/logout",verifyToken, UserController.logout)
 router.get("/get_city/:long/:lat",SupportController.getCity)
-
+router.post("/message",MessageController.postMessage)
 export default router

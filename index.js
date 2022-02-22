@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import morgan from 'morgan'
+import morgan from 'morgan'//на будующее
 import cookieParser from "cookie-parser"
 // import webPush from "web-push"//Пуш уведомления
 // import dotenv from 'dotenv'
@@ -51,7 +51,7 @@ async function startApp() {
       useNewUrlParser: true,
     }); //Подключаемся к MongoDB
     
-    app.listen(PORT, () => {
+    app.listen(PORT,  () => {
       console.log("SERVER START AT PORT:", PORT);
     });
   } catch (e) {
