@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const Profile = new mongoose.Schema({
   type: "object",
   mail: { type: String },
@@ -45,6 +46,7 @@ const User = new mongoose.Schema({
   profile: { type: "object", ref: "profile" },
   noticeBreed: {type :"object",properties:[Object]},
   noticeMatingDate: {type: "object",properties:[Object]},
+  chats:{ type: "array", items: [String] },
   token: { type: "string" },
 });
 export default mongoose.model("User", User);

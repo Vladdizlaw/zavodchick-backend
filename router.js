@@ -2,6 +2,7 @@ import Router  from "express";
 import verifyToken from './middleware.js'
 import SupportController from './supportcontroller.js'
 import MessageController from './messages.js'
+import ChatController from "./chatcontroller.js";
 const router= new Router()
 import UserController from "./usercontroller.js"
 router.post("/create_user", UserController.createUser)
@@ -17,4 +18,8 @@ router.post("/subscribe",SupportController.subscribePush)
 router.get("/logout",verifyToken, UserController.logout)
 router.get("/get_city/:long/:lat",SupportController.getCity)
 router.post("/message",MessageController.postMessage)
+router.get("/chat/create_chat/:commonId/:secondId",ChatController.createChat)
+router.post("/chat/get_chat/",ChatController.getChat)
+router.post("/chat/get_chats",ChatController.getChats)
+router.post("/chat/post_message",ChatController.postMessage)
 export default router
