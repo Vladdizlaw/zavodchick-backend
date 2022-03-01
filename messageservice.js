@@ -11,8 +11,9 @@ const pusher =new Pusher({
 class MessageService{
     async postMessage(from,to,msg){
         console.log([arguments])
-    const data=await pusher.trigger("chat","message",{message:msg,from:from,to:to})
+    const data=await pusher.trigger(`${to}`,"message",{message:msg,from:from})
     return data
 }
+  
 }
 export default new MessageService();
