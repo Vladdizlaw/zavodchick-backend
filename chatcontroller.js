@@ -16,8 +16,10 @@ class ChatController {
     try {
       console.log("chatsbodyreq", req.body);
       let chats = await ChatService.getChats(req.body.chats);
-      console.log("chats", chats);
+     
       res.status(200).json(chats);
+    
+     
     } catch (e) {
       console.log(e);
       res.status(500).json(e);
@@ -26,7 +28,8 @@ class ChatController {
   async getChat(req, res) {
     try {
       let chat = await ChatService.getChat(req.body.chatId);
-      res.status(200).json(chat);
+      console.log('rsult chat controller',chat)
+      await res.status(200).json(chat);
     } catch (e) {
       console.log(e);
       res.status(500).json(e);

@@ -9,9 +9,9 @@ const pusher =new Pusher({
   useTLS: true
 });
 class MessageService{
-    async postMessage(from,to,msg){
+    async postMessage(from,to,name,msg){
         console.log([arguments])
-    const data=await pusher.trigger(`${to}`,"message",{message:msg,from:from})
+    const data=await pusher.trigger(`${to}`,"message",{message:msg,from:from,name:name})
     return data
 }
   

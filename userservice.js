@@ -161,8 +161,8 @@ class UserService {
       return e;
     }
   }
-  async getUsers() {
-    const users = await User.find();
+  async getUsers(idArray) {
+    const users = await User.find({'profile.id':{$in:idArray}});
     return users;
   }
   async getUser(id) {
