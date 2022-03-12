@@ -3,6 +3,7 @@ import MessageService from "./messageservice.js";
 class MessageController {
   async postMessage(req, res) {
     try {
+      // console.log('post_chat',[arguments])
       const data = await MessageService.postMessage(
         req.body.from,
         req.body.to,

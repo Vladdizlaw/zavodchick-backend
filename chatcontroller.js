@@ -37,7 +37,7 @@ class ChatController {
   }
   async postMessage(req, res) {
     try {
-      // console.log('postmessage',req.body)
+      console.log('postmessage',req.body)
       let result = await ChatService.postMessage(
         req.body.chatId,
         req.body.author,
