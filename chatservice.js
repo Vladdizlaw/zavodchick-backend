@@ -21,37 +21,15 @@ class ChatService {
     }
   }
   async getChats(chatIdArray) {
-    const resultChats = [];
-    var chats = await Chat.find({ chatId: {$in:chatIdArray }});
-    // chatIdArray.forEach(async (chatId) => {
-    //   try {
-    //   var chat = await Chat.findOne({ chatId: chatId });
-    //   } catch(e){
-    //     console.log('e',e)
-    //   }
-    //   if (!chat) {
-    //       console.log('chat not  found')
-    //     const chatReverse = chatId.split("#");
-    //     chat = await Chat.findOne({
-    //       chatId: `${chatReverse[1]}#${chatReverse[0]}`,
-    //     });
-    //   }
-    //   if (chat.messages.length > 100) {
-    //     // console.log("result>100");
-    //     const seqMessages = chat.messages.slice(-100);
-    //     const newChat = { chatId: chat.chatId, messages: seqMessages };
-    //     await resultChats.push(JSON.stringify(newChat));
-    //   } else {
-    //     await resultChats.push(JSON.stringify(chat));
-    //   }
-      // console.log("get_chats", chat);
-    // });
+    const idsReverseArray = [];
+    chatIdArray.forEach((el)=>{
+      let idRev=el.split('#')
+      idsReverseArray.push(`${idRev[1]}#${idRev[0]}`)
+    } )
+    const sumArray=[...chatIdArray,...idsReverseArray]
    
-    // setTimeout(()=>{
-    //   console.log("get_chats_result", resultChats.length);
-    //   //  console.log("get_chats done",resultChats[0]);
-    //   return  resultChats;
-    // },700)
+    const chats = await Chat.find({ chatId: {$in:sumArray }});
+  
     return chats
   }
   async postMessage(chatId, author, msg) {
@@ -69,6 +47,11 @@ class ChatService {
   }
   async getChat(chatId) {
     let chat = await Chat.findOne({ chatId: chatId });
+    if (!chat){
+      let idRev=chatId.split('#')
+     chatId=`${idRev[1]}#${idRev[0]}`
+     chat = await Chat.findOne({ chatId: chatId });
+    }
     console.log("getChat", chatId, chat);
     return chat;
   }
