@@ -1,8 +1,6 @@
 import Chat from "./chat.js";
-import MessageService from "./messageservice.js";
-async function get_chat(idChat){
 
-}
+
 class ChatService {
   async createChat(commonUserId, secondUserId) {
     const chatIdReverse = `${secondUserId}#${commonUserId}`;
@@ -20,17 +18,20 @@ class ChatService {
       return chat;
     }
   }
-  async getChats(chatIdArray) {
+  async getChats(chatIdArray,selfId) {
     const idsReverseArray = [];
     chatIdArray.forEach((el)=>{
       let idRev=el.split('#')
       idsReverseArray.push(`${idRev[1]}#${idRev[0]}`)
     } )
     const sumArray=[...chatIdArray,...idsReverseArray]
-   
-    const chats = await Chat.find({ chatId: {$in:sumArray }});
+    console.log('sumArray',sumArray)
+    
+    const chats = await Chat.find({ "chatId" : {$in:sumArray }});
+    const allChats = await Chat.find({ "chatId": {"$regex":selfId,"$options":"i"}});
+
   
-    return chats
+    return {chats, allChats}
   }
   async postMessage(chatId, author, msg) {
     const msgToAdd = { author: author, value: msg, date: Date.now() };

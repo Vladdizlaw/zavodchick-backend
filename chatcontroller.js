@@ -14,9 +14,9 @@ class ChatController {
   }
   async getChats(req, res) {
     try {
-      console.log("chatsbodyreq", req.body);
-      let chats = await ChatService.getChats(req.body.chats);
      
+      let chats = await ChatService.getChats(req.body.chats,req.body.id);
+      console.log("chatsbodyres", chats);
       res.status(200).json(chats);
     
      
