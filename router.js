@@ -22,4 +22,5 @@ router.get("/chat/create_chat/:commonId/:secondId",ChatController.createChat)
 router.post("/chat/get_chat/",ChatController.getChat)
 router.post("/chat/get_chats",ChatController.getChats)
 router.post("/chat/post_message",ChatController.postMessage)
+router.post("/chat/delete_chat/",ChatController.deleteChat)
 export default router

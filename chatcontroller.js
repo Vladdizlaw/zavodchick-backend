@@ -35,6 +35,16 @@ class ChatController {
       res.status(500).json(e);
     }
   }
+  async deleteChat(req,res){
+    try {
+      let chat = await ChatService.deleteChat(req.body.chatId);
+      
+      await res.status(200).json(chat);
+    }catch (e) {
+      console.log(e);
+      res.status(500).json(e);
+    }
+  }
   async postMessage(req, res) {
     try {
       console.log('postmessage',req.body)

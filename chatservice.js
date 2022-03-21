@@ -18,6 +18,10 @@ class ChatService {
       return chat;
     }
   }
+  async deleteChat(chatId){
+    const chat = await Chat.findOneAndDelete({ chatId: chatId });
+    return chat
+  }
   async getChats(chatIdArray,selfId) {
     const idsReverseArray = [];
     chatIdArray.forEach((el)=>{
@@ -27,8 +31,8 @@ class ChatService {
     const sumArray=[...chatIdArray,...idsReverseArray]
     console.log('sumArray',sumArray)
     
-    const chats = await Chat.find({ "chatId" : {$in:sumArray }});
-    const allChats = await Chat.find({ "chatId": {"$regex":selfId,"$options":"i"}});
+    const chats = await Chat.find({ "chatId" : {$in:sumArray },"chat.messages":{$size:{$gt: 0}}});
+    const allChats = await Chat.find({ "chatId": {"$regex":selfId,"$options":"i"},"chat.messages":{$size:{$gt: 0}}});
 
   
     return {chats, allChats}
