@@ -2,6 +2,12 @@ import axios from "axios";
 import translate from "translate";
 import webPush from "web-push"
 class SupportService {
+  async getBreeds(animalType){
+
+  }
+  async getPic(animalType){
+    
+  }
   async getCity(long, lat) {
     //Получаем город из геопозиции
     try {

@@ -1,17 +1,49 @@
 import User from "./user.js";
 import * as uuid from "uuid";
-import path from "path";
+// import path from "path";
 import bcrypt from "bcryptjs";
-// import { url } from "inspector";
 import jwt from "jsonwebtoken";
-import { start } from "repl";
-// import cookieParser from "cookie-parser"
-// import {URL} from 'url';
-// import dotenv from 'dotenv'
-// dotenv.config()
+
+
 
 class UserService {
+// //Работа с пользователем
+// async createPhoto(files, id) {
+//   console.log('arguments createphoto',[arguments])
+//   try {
+   
+//     let photoUrl = [];
+//     Object.keys(files).forEach((el) => {
+//       const nameFile = uuid.v4() + files[el].name;
+//       const filePath = path.resolve("static", nameFile);
+//       files[el].mv(filePath);
+     
+//       photoUrl.push(nameFile);
+//     });
+//   //   const targetFielad=`animals[${index}].photoUrl`
+//     // const a = await User.findOneAndUpdate(
+//     //   { "profile.id": id },
+//     //   // {'animals':{[index]: {'photoUrl':photoUrl}}}
+//     //   {[targetFielad]:photoUrl},
+//     //   { returnOriginal: false }
+//     // );
+//     try {
+//     const user = await User.findOneAndUpdate({"profile.id": id },
+//     {[targetFielad]:photoUrl}
+//     )}catch(e){
+//        console.log("phhoto-answer",e)
+//     }
+//    ;
+    
+   
+    
+//   } catch (e) {
+//     console.log(e);
+//   }
+
+// }
   async login(data) {
+
     const { mail, pass } = data;
     if (!mail || !pass) {
       console.log("No email or pass");
@@ -33,60 +65,31 @@ class UserService {
     }
   }
 
-  async createUser(user) {
+  async createUser(profile) {
     // const newUser = { ...user };
     // console.log("newUser:", user);
-    const oldUser = await User.findOne({ "profile.mail": user.profile.mail });
+    const oldUser = await User.findOne({ "mail": profile.mail });
     // console.log('oldUser:',oldUser);
     if (oldUser) {
       // console.log("error");
       console.log("oldUser:", oldUser);
       throw new Error("Duplicate email");
     }
-    let encryptedPassword = bcrypt.hashSync(user.profile.pass, 10);
+    let encryptedPassword = bcrypt.hashSync(profile.pass, 10);
     console.log("encrypted:", encryptedPassword);
-    user.profile.pass = encryptedPassword;
+    profile.pass = encryptedPassword;
     const token = jwt.sign(
-      { user_id: user.id, email: user.profile.mail },
+      { user_id: profile.id, email:profile.mail },
       process.env.TOKEN_KEY
     );
-    user.token = token;
-    const createdUser = await User.create(user);
+   profile.token = token;
+    const createdUser = await User.create(profile);
+    // const usersSubscrubed= await User.find({"noticeBreed.push": true})
+
     // console.log("return:", user);
     return createdUser;
   }
-  async createPhoto(files, id) {
-    try {
-      //  const user=User.findOne({"profile.id":id})
-      //  console.log(user)
-      // let photoArr = [];
-
-      let photoUrl = [];
-      Object.keys(files).forEach((el) => {
-        // console.log(files[el]);
-
-        const nameFile = uuid.v4() + files[el].name;
-        const filePath = path.resolve("static", nameFile);
-        files[el].mv(filePath);
-        // console.log();
-        // const blob=new Blob(files[el])
-        // const urlq= new URL(filePath)
-        // console.log(urlq)
-        // photoArr.push(files[el]);
-        photoUrl.push(nameFile);
-      });
-      const a = await User.findOneAndUpdate(
-        { "profile.id": id },
-        { photoUrl: photoUrl }
-      );
-      // user.update({photoUrl:photoArr})
-    } catch (e) {
-      console.log(e);
-    }
-    //   photo.forEach(element => {
-
-    //   });
-  }
+  
   async getCustomUsers(
     typeAnimal,
     startAge,

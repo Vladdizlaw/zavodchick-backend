@@ -1,12 +1,15 @@
 import Router  from "express";
 import verifyToken from './middleware.js'
 import SupportController from './supportcontroller.js'
+import AnimalController from './animalcontroller.js'
 import MessageController from './messages.js'
 import ChatController from "./chatcontroller.js";
 const router= new Router()
 import UserController from "./usercontroller.js"
+router.post("/create_animal",AnimalController.createAnimal)
+router.get("/get_animals:ownerId",AnimalController.getAnimals) 
+router.post("/create_photo", AnimalController.createPhoto)
 router.post("/create_user", UserController.createUser)
-router.post("/create_photo", UserController.createPhoto)
 router.get("/get_auth_user",verifyToken, UserController.getAuthUser) 
 router.post("/get_users",UserController.getUsers) 
 router.get("/get_user:id",UserController.getUser)
