@@ -8,40 +8,10 @@ import jwt from "jsonwebtoken";
 
 class UserService {
 // //Работа с пользователем
-// async createPhoto(files, id) {
-//   console.log('arguments createphoto',[arguments])
-//   try {
-   
-//     let photoUrl = [];
-//     Object.keys(files).forEach((el) => {
-//       const nameFile = uuid.v4() + files[el].name;
-//       const filePath = path.resolve("static", nameFile);
-//       files[el].mv(filePath);
-     
-//       photoUrl.push(nameFile);
-//     });
-//   //   const targetFielad=`animals[${index}].photoUrl`
-//     // const a = await User.findOneAndUpdate(
-//     //   { "profile.id": id },
-//     //   // {'animals':{[index]: {'photoUrl':photoUrl}}}
-//     //   {[targetFielad]:photoUrl},
-//     //   { returnOriginal: false }
-//     // );
-//     try {
-//     const user = await User.findOneAndUpdate({"profile.id": id },
-//     {[targetFielad]:photoUrl}
-//     )}catch(e){
-//        console.log("phhoto-answer",e)
-//     }
-//    ;
-    
-   
-    
-//   } catch (e) {
-//     console.log(e);
-//   }
-
-// }
+  async getAllMails(){
+    const mails= await User.find({},{mail:1,_id:0})
+    return mails
+  }
   async login(data) {
 
     const { mail, pass } = data;

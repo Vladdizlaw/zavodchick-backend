@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import Animal from "./animal.js"
 const User = new mongoose.Schema({
   type: "object",
   mail: { type: String },

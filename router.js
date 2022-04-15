@@ -9,6 +9,7 @@ import UserController from "./usercontroller.js"
 router.post("/create_animal",AnimalController.createAnimal)
 router.get("/get_animals:ownerId",AnimalController.getAnimals) 
 router.post("/create_photo", AnimalController.createPhoto)
+router.get("/get_mails",UserController.getAllMails) 
 router.post("/create_user", UserController.createUser)
 router.get("/get_auth_user",verifyToken, UserController.getAuthUser) 
 router.post("/get_users",UserController.getUsers) 

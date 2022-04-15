@@ -1,6 +1,14 @@
 import UserService from "./userservice.js";
 import AnimalService from "./animalservice.js"
 class UserController {
+  async getAllMails(req,res){
+    try {
+      const mails= await UserService.getAllMails()
+      res.status(200).json(mails)
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
   async createUser(req, res) {
     try {
       console.log('creteUser req:',req.body)
