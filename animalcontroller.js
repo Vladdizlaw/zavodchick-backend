@@ -18,13 +18,20 @@ class AnimalController {
           }
         }
 
+    async deleteAnimal(req,res){
+        try {
+            
+        } catch (error) {
+            res.status(500).json(e);
+        }
+    }    
     
     async createPhoto(req,res){
         try{
             await AnimalService.createPhoto(req.files, req.body.animalId);
             res.status(200)      
         }catch(e){
-            console.log(e);
+            console.log('PHOTO',e);
              res.status(500).json(e);
         }
 

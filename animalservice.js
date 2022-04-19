@@ -45,7 +45,7 @@ async createAnimal(animal){
 }
 async getAnimals(owner){
      const animals = Animal.find({'owner':owner})
-     console.log('animals :',animals)
+    //  console.log('animals :',animals)
      return animals
 }
 
