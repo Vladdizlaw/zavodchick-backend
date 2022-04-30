@@ -33,7 +33,7 @@ class UserController {
       // res.setHeader('Set-Cookie', `access_token=${user.token}; HttpOnly`).status(200).json(user);
     } catch (e) {
       console.log(e);
-      res.status(404).json(e);
+      res.status(404).json('Not Found');
     }
   }
   async logout(req, res) {

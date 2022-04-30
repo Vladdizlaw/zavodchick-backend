@@ -16,13 +16,13 @@ class UserService {
       console.log("No email or pass");
       throw new Error("No email or pass");
     }
-    const user = await User.findOne({ "profile.mail": mail });
+    const user = await User.findOne({ "mail": mail });
     if (!user) {
       throw new Error("No user with this email");
     }
-    if (await bcrypt.compare(pass, user.profile.pass)) {
+    if (await bcrypt.compare(pass, user.pass)) {                          
       const token = jwt.sign(
-        { user_id: user.id, email: user.profile.mail },
+        { user_id: user.id, email: user.mail },
         process.env.TOKEN_KEY
       );
 
