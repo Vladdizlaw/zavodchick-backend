@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser"
 import Mongoose from "mongoose"; //Подключение к mongoDB
 import cors from "cors"; //Для работы корс без блокировки
 import fileUpload from "express-fileupload"; //Работа с файлами
-import dotenv from 'dotenv' 
+import dotenv from 'dotenv' //env
 dotenv.config()
 import router from "./router.js"; //маршруты
 const PORT = process.env.PORT 
@@ -34,6 +34,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(fileUpload({ createParentPath: true}));
 app.use(morgan('dev'));
+
 app.use("/api", router);
 
 async function startApp() {

@@ -4,8 +4,10 @@ class UserController {
   async getAllMails(req,res){
     try {
       const mails= await UserService.getAllMails()
+     
       res.status(200).json(mails)
     } catch (error) {
+      console.log('GET_ALL_MAILS',error)
       res.status(500).json(error);
     }
   }
