@@ -15,9 +15,11 @@ class SupportController {
         }
     }
     async subscribePush(req,res){
-        try{
-            const data = await SupportService.subscribePush(req.body)
-            console.log('subscribe', data)
+        try{ 
+            console.log('subscribe', req.body)
+            const body= req.body
+            const data = await SupportService.subscribePush(body.subs,body.msg)
+           
             return res.status(200).json(data)
         }catch(e){
             console.log(e)

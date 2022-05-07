@@ -1,29 +1,28 @@
 import User from "./user.js";
 import * as uuid from "uuid";
-import path from "path";
+// import path from "path";
 import bcrypt from "bcryptjs";
-// import { url } from "inspector";
 import jwt from "jsonwebtoken";
-import { start } from "repl";
-// import cookieParser from "cookie-parser"
-// import {URL} from 'url';
-// import dotenv from 'dotenv'
-// dotenv.config()
 
 class UserService {
+  // //Работа с пользователем
+  async getAllMails() {
+    const mails = await User.find({}, { mail: 1, _id: 0 });
+    return mails;
+  }
   async login(data) {
     const { mail, pass } = data;
     if (!mail || !pass) {
       console.log("No email or pass");
       throw new Error("No email or pass");
     }
-    const user = await User.findOne({ "profile.mail": mail });
+    const user = await User.findOne({ "mail": mail });
     if (!user) {
       throw new Error("No user with this email");
     }
-    if (await bcrypt.compare(pass, user.profile.pass)) {
+    if (await bcrypt.compare(pass, user.pass)) {                          
       const token = jwt.sign(
-        { user_id: user.id, email: user.profile.mail },
+        { user_id: user.id, email: user.mail },
         process.env.TOKEN_KEY
       );
 
@@ -33,60 +32,27 @@ class UserService {
     }
   }
 
-  async createUser(user) {
-    // const newUser = { ...user };
-    // console.log("newUser:", user);
-    const oldUser = await User.findOne({ "profile.mail": user.profile.mail });
-    // console.log('oldUser:',oldUser);
+  async createUser(profile) {
+    const oldUser = await User.findOne({ mail: profile.mail });
     if (oldUser) {
-      // console.log("error");
-      console.log("oldUser:", oldUser);
+      // console.log("oldUser:", oldUser);
       throw new Error("Duplicate email");
     }
-    let encryptedPassword = bcrypt.hashSync(user.profile.pass, 10);
-    console.log("encrypted:", encryptedPassword);
-    user.profile.pass = encryptedPassword;
+    let encryptedPassword = bcrypt.hashSync(profile.pass, 10);
+    // console.log("encrypted:", encryptedPassword);
+    profile.pass = encryptedPassword;
     const token = jwt.sign(
-      { user_id: user.id, email: user.profile.mail },
+      { user_id: profile.id, email: profile.mail },
       process.env.TOKEN_KEY
     );
-    user.token = token;
-    const createdUser = await User.create(user);
+    profile.token = token;
+    const createdUser = await User.create(profile);
+    // const usersSubscrubed= await User.find({"noticeBreed.push": true})
+
     // console.log("return:", user);
     return createdUser;
   }
-  async createPhoto(files, id) {
-    try {
-      //  const user=User.findOne({"profile.id":id})
-      //  console.log(user)
-      // let photoArr = [];
 
-      let photoUrl = [];
-      Object.keys(files).forEach((el) => {
-        // console.log(files[el]);
-
-        const nameFile = uuid.v4() + files[el].name;
-        const filePath = path.resolve("static", nameFile);
-        files[el].mv(filePath);
-        // console.log();
-        // const blob=new Blob(files[el])
-        // const urlq= new URL(filePath)
-        // console.log(urlq)
-        // photoArr.push(files[el]);
-        photoUrl.push(nameFile);
-      });
-      const a = await User.findOneAndUpdate(
-        { "profile.id": id },
-        { photoUrl: photoUrl }
-      );
-      // user.update({photoUrl:photoArr})
-    } catch (e) {
-      console.log(e);
-    }
-    //   photo.forEach(element => {
-
-    //   });
-  }
   async getCustomUsers(
     typeAnimal,
     startAge,
@@ -131,11 +97,9 @@ class UserService {
             $gt: afterDate.join("-"),
             $lt: beforeDate.join("-"),
           };
-          
-        } else if(key=='id') {
-          user[String(`profile.${key}`)]={$ne:animal[key]}
-
-        }else {
+        } else if (key == "id") {
+          user[String(`profile.${key}`)] = { $ne: animal[key] };
+        } else {
           user[String(`animal.${key}`)] = animal[key];
         }
       }
@@ -161,30 +125,30 @@ class UserService {
       return e;
     }
   }
-  async getUsers() {
-    const users = await User.find();
+  async getUsers(idArray) {
+    const users = await User.find({ "id": { $in: idArray } });
     return users;
   }
   async getUser(id) {
-    console.log("getUser id", id);
+    // console.log("getUser id", id);
     if (!id) {
       throw new Error("No id");
     }
-    const user = await User.findOne({ "profile.id": id });
-    console.log("getUser", user);
+    const user = await User.findOne({ "id": id });
+    // console.log("getUser", user);
 
     return user;
   }
   async updateUser(user) {
     const updatedUser = await User.findOneAndUpdate(
-      { "profile.id": user.profile.id },
+      { "id": user.profile.id },
       user,
       { returnOriginal: false }
     );
     return updatedUser;
   }
   async deleteUser(id) {
-    await User.findOneAndDelete({ "profile.id": id });
+    await User.findOneAndDelete({ "id": id });
   }
 }
 export default new UserService();

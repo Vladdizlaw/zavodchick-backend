@@ -2,6 +2,12 @@ import axios from "axios";
 import translate from "translate";
 import webPush from "web-push"
 class SupportService {
+  async getBreeds(animalType){
+
+  }
+  async getPic(animalType){
+    
+  }
   async getCity(long, lat) {
     //Получаем город из геопозиции
     try {
@@ -28,14 +34,14 @@ class SupportService {
       throw new Error(e);
     }
   }
-  async subscribePush(subscription){
+  async subscribePush(subscription,msg){
     webPush.setVapidDetails(
-      "mailto:test@test.com",
+      "mailto:zavodhick@zavodchick.com",
   process.env.publicVapidKey,
   process.env.privateVapidKey
     )
     console.log('subs',subscription)
-    const payload = JSON.stringify({ title: "Zavodchick notification" });
+    const payload = JSON.stringify({ title: `Новое сообщение` ,body:msg});
 
   // Pass object into sendNotification
   webPush
