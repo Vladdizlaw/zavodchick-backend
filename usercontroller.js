@@ -27,9 +27,10 @@ class UserController {
   }
   async login(req, res) {
     try {
+      console.log()
       const user = await UserService.login(req.body);
       res
-        .cookie("access_token", user.token, { httpOnly: true })
+        .cookie("access_token", user.token, {  sameSite: 'none', secure: true ,httpOnly: true })
         .status(200)
         .json(user);
       // res.setHeader('Set-Cookie', `access_token=${user.token}; HttpOnly`).status(200).json(user);
@@ -70,7 +71,7 @@ class UserController {
   }
   async getAuthUser(req, res) {
     try {
-      // console.log("getauthuser req:", req.userId);
+    
       const user = await UserService.getUser(req.userId);
 
       return res.json(user);

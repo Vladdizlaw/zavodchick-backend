@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken'
 const verifyToken=(req,res,next)=>{
-    console.log('cookie from req:',req.cookies)
+    console.log('cookies from req:',req.cookies.access_token)
     const token=req.cookies.access_token
-    
+
     if (!token) {
         return res.status(403).send("A token is required for authentication");
       }
