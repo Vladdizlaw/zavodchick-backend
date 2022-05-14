@@ -1,4 +1,5 @@
 import User from "./user.js";
+import Animal from "./animal.js"
 import * as uuid from "uuid";
 // import path from "path";
 import bcrypt from "bcryptjs";
@@ -74,8 +75,10 @@ class UserService {
         animal[key] = searchObj[key];
 
         if (key == "city") {
-          user[String(`profile.${key}`)] = animal[key];
-        } else if (key == "dateMating") {
+        //   user[String(`profile.${key}`)] = animal[key];
+        null
+        } 
+         else if (key == "dateMating") {
           const beforeDate = animal[key].split("-");
           const afterDate = animal[key].split("-");
           beforeDate.splice(
@@ -93,33 +96,48 @@ class UserService {
               : Number(animal[key].split("-")[1]) - 1
           );
           console.log(beforeDate);
-          user["animal.dateMating"] = {
+          user["dateMating"] = {
             $gt: afterDate.join("-"),
             $lt: beforeDate.join("-"),
           };
         } else if (key == "id") {
-          user[String(`profile.${key}`)] = { $ne: animal[key] };
+          // user[String(`profile.${key}`)] = { $ne: animal[key] };
+          null
         } else {
-          user[String(`animal.${key}`)] = animal[key];
+          user[String(`${key}`)] = animal[key];
         }
       }
     });
     if (startAge && startAge !== "null" && (!stopAge || stopAge == "null")) {
       // console.log("startAge:",startAge,"stopAge:",stopAge)
-      user["animal.age"] = { $gt: startAge };
+      user["age"] = { $gt: +startAge-1 };
     }
     if (startAge && startAge !== "null" && stopAge && stopAge !== "null") {
-      user["animal.age"] = { $gt: startAge, $lt: stopAge };
+      user["age"] = { $gt: +startAge-1, $lt: +stopAge+1 };
     }
     if ((!startAge || startAge == "null") && stopAge && stopAge !== "null") {
-      user["animal.age"] = { $lt: stopAge };
+      user["age"] = { $lt: +stopAge+1 };
     }
 
     console.log("getCustomUsers:", user);
     try {
-      const users = await User.find(user).exec();
-      console.log("getCustomUsers:", users.length);
-      return users;
+      const animals = await Animal.find(user).exec();
+      console.log("getCustomUsers:", animals.length);
+      let owners
+     
+        const ownerIds=[]
+        animals.forEach(animal=>{
+          ownerIds.push(animal.owner)
+          
+        })
+        if (searchObj.city&&searchObj.city!=='null'){
+        owners= await User.find({'id':{$in: ownerIds,$ne: searchObj.id},"city":searchObj.city})
+        // console.log('ownerIdzs',owners)
+        }else{
+          owners= await User.find({'id':{$in: ownerIds,$ne: searchObj.id}})
+        // console.log('ownerIdzs',owners)
+        }
+      return {animals,owners};
     } catch (e) {
       console.log(e);
       return e;
