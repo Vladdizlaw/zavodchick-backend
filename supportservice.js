@@ -12,23 +12,24 @@ class SupportService {
     //Получаем город из геопозиции
     try {
       const data = await axios.get(
-        "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
+        "https://api.tomtom.com/search/2/reverseGeocode/" +
           lat +
           "," +
           long +
-          `&key=${process.env.GOOGLE_KEY}`
+          `json?key=${process.env.TOMTOM_KEY}`
       );
-      // console.log("city",data.data.results);
-      let result = data.data.results[0]["address_components"][2]["long_name"];
+      // console.log("city",data.data.addresses.localName);
+      // let result = data.data.results[0]["address_components"][2]["long_name"];
 
-      const city =
-        result.split(" ")[0] == "Gorod" ? result.split(" ")[1] : result;
+      // const city =
+        // result.split(" ")[0] == "Gorod" ? result.split(" ")[1] : result;
 
-      translate.engine = "google"; //переводим город  с латиницы на русский
+      // translate.engine = "google"; //переводим город  с латиницы на русский
 
-      translate.key = process.env.GOOGLE_KEY;
-      const res = await translate(city, "ru");
-      console.log("city:", res);
+      // translate.key = process.env.GOOGLE_KEY;
+      // const res = await translate(city, "ru");
+      const res=data.data.addresses[0].address.localName
+      console.log("city:",res);
       return res;
     } catch (e) {
       throw new Error(e);

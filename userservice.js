@@ -110,13 +110,13 @@ class UserService {
     });
     if (startAge && startAge !== "null" && (!stopAge || stopAge == "null")) {
       // console.log("startAge:",startAge,"stopAge:",stopAge)
-      user["age"] = { $gt: startAge };
+      user["age"] = { $gt: +startAge-1 };
     }
     if (startAge && startAge !== "null" && stopAge && stopAge !== "null") {
-      user["age"] = { $gt: startAge, $lt: stopAge };
+      user["age"] = { $gt: +startAge-1, $lt: +stopAge+1 };
     }
     if ((!startAge || startAge == "null") && stopAge && stopAge !== "null") {
-      user["age"] = { $lt: stopAge };
+      user["age"] = { $lt: +stopAge+1 };
     }
 
     console.log("getCustomUsers:", user);

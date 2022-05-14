@@ -7,7 +7,7 @@ class SupportController {
         try{
             
         const data= await SupportService.getCity(req.params.long,req.params.lat)
-        console.log("city:",data)
+        console.log("city::",data)
         res.status(200).json(data)
         }catch(e){
             console.log(e)
