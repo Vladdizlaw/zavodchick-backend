@@ -1,5 +1,5 @@
 import UserService from "./userservice.js";
-import AnimalService from "./animalservice.js"
+
 class UserController {
   async getAllMails(req,res){
     try {
@@ -50,21 +50,20 @@ class UserController {
       res.status(501).json(e);
     }
   }
-  // async createPhoto(req, res) {
-  //   try {
-  //     //  console.log(req.body.id)
-  //     const user = await UserService.createPhoto(req.files, req.body.id,req.body.animalIndex);
-  //     // console.log(req.body)
-
-  //     res.status(200).json(req.body);
-  //   } catch (e) {
-  //    
-  //   }
-  // }
+  async getUserWithAnimals(req,res){
+    try {
+      const fullUser= await UserService.getUserWithAnimals(req.params.id)
+      console.log("fullUser",fullUser)
+      return res.json(fullUser)
+    } catch(e){
+      console.log(e);
+      res.status(502).json('Error get user with animals',e);
+    }
+  }
   async getUsers(req, res) {
     try {
       const users = await UserService.getUsers(req.body.users);
-      res.json(users);
+      return res.json(users);
     } catch (e) {
       res.status(500).json(e);
     }

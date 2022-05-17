@@ -14,13 +14,7 @@ class AnimalService {
            
             photoUrl.push(nameFile);
           });
-        //   const targetFielad=`animals[${index}].photoUrl`
-          // const a = await User.findOneAndUpdate(
-          //   { "profile.id": id },
-          //   // {'animals':{[index]: {'photoUrl':photoUrl}}}
-          //   {[targetFielad]:photoUrl},
-          //   { returnOriginal: false }
-          // );
+    
         try{
           const animal = await Animal.findOneAndUpdate({"id": id },
           {'photoUrl':photoUrl})

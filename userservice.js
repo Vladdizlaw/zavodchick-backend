@@ -1,12 +1,22 @@
 import User from "./user.js";
-import Animal from "./animal.js"
-import * as uuid from "uuid";
-// import path from "path";
+import Animal from "./animal.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 class UserService {
   // //Работа с пользователем
+  async getUserWithAnimals(userId){
+    const profile= await User.findOne({id: userId})
+    let animalsUnsort= await Animal.find({owner:userId})
+    console.log('animalsUnsort',animalsUnsort)
+    const animals = {}
+   animalsUnsort.forEach(animal=>{
+     animals[animal.ind]=animal
+
+    })
+    return {profile,animals}
+
+  }
   async getAllMails() {
     const mails = await User.find({}, { mail: 1, _id: 0 });
     return mails;
@@ -17,11 +27,11 @@ class UserService {
       console.log("No email or pass");
       throw new Error("No email or pass");
     }
-    const user = await User.findOne({ "mail": mail });
+    const user = await User.findOne({ mail: mail });
     if (!user) {
       throw new Error("No user with this email");
     }
-    if (await bcrypt.compare(pass, user.pass)) {                          
+    if (await bcrypt.compare(pass, user.pass)) {
       const token = jwt.sign(
         { user_id: user.id, email: user.mail },
         process.env.TOKEN_KEY
@@ -75,10 +85,9 @@ class UserService {
         animal[key] = searchObj[key];
 
         if (key == "city") {
-        //   user[String(`profile.${key}`)] = animal[key];
-        null
-        } 
-         else if (key == "dateMating") {
+          //   user[String(`profile.${key}`)] = animal[key];
+          null;
+        } else if (key == "dateMating") {
           const beforeDate = animal[key].split("-");
           const afterDate = animal[key].split("-");
           beforeDate.splice(
@@ -102,7 +111,7 @@ class UserService {
           };
         } else if (key == "id") {
           // user[String(`profile.${key}`)] = { $ne: animal[key] };
-          null
+          null;
         } else {
           user[String(`${key}`)] = animal[key];
         }
@@ -110,41 +119,43 @@ class UserService {
     });
     if (startAge && startAge !== "null" && (!stopAge || stopAge == "null")) {
       // console.log("startAge:",startAge,"stopAge:",stopAge)
-      user["age"] = { $gt: +startAge-1 };
+      user["age"] = { $gt: +startAge - 1 };
     }
     if (startAge && startAge !== "null" && stopAge && stopAge !== "null") {
-      user["age"] = { $gt: +startAge-1, $lt: +stopAge+1 };
+      user["age"] = { $gt: +startAge - 1, $lt: +stopAge + 1 };
     }
     if ((!startAge || startAge == "null") && stopAge && stopAge !== "null") {
-      user["age"] = { $lt: +stopAge+1 };
+      user["age"] = { $lt: +stopAge + 1 };
     }
 
     console.log("getCustomUsers:", user);
     try {
       const animals = await Animal.find(user).exec();
       console.log("getCustomUsers:", animals.length);
-      let owners
-     
-        const ownerIds=[]
-        animals.forEach(animal=>{
-          ownerIds.push(animal.owner)
-          
-        })
-        if (searchObj.city&&searchObj.city!=='null'){
-        owners= await User.find({'id':{$in: ownerIds,$ne: searchObj.id},"city":searchObj.city})
+      let owners;
+
+      const ownerIds = [];
+      animals.forEach((animal) => {
+        ownerIds.push(animal.owner);
+      });
+      if (searchObj.city && searchObj.city !== "null") {
+        owners = await User.find({
+          id: { $in: ownerIds, $ne: searchObj.id },
+          city: searchObj.city,
+        });
         // console.log('ownerIdzs',owners)
-        }else{
-          owners= await User.find({'id':{$in: ownerIds,$ne: searchObj.id}})
+      } else {
+        owners = await User.find({ id: { $in: ownerIds, $ne: searchObj.id } });
         // console.log('ownerIdzs',owners)
-        }
-      return {animals,owners};
+      }
+      return { animals, owners };
     } catch (e) {
       console.log(e);
       return e;
     }
   }
   async getUsers(idArray) {
-    const users = await User.find({ "id": { $in: idArray } });
+    const users = await User.find({ id: { $in: idArray } });
     return users;
   }
   async getUser(id) {
@@ -152,21 +163,21 @@ class UserService {
     if (!id) {
       throw new Error("No id");
     }
-    const user = await User.findOne({ "id": id });
+    const user = await User.findOne({ id: id });
     // console.log("getUser", user);
 
     return user;
   }
   async updateUser(user) {
     const updatedUser = await User.findOneAndUpdate(
-      { "id": user.profile.id },
+      { id: user.id },
       user,
       { returnOriginal: false }
     );
     return updatedUser;
   }
   async deleteUser(id) {
-    await User.findOneAndDelete({ "id": id });
+    await User.findOneAndDelete({ id: id });
   }
 }
 export default new UserService();
